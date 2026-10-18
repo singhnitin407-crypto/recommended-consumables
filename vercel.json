@@ -1,0 +1,1 @@
+{"rewrites": [{"source": "/img/:file", "destination": "/:file"}, {"source": "/fonts/:file", "destination": "/:file"}]}
