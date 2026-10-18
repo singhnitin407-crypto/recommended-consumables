@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Recommended Consumables</title>
+  <link rel="preload" href="fonts/kanit-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/kanit-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="page">
+    <h1 class="visually-hidden">Recommended Consumables prototype</h1>
+
+    <section class="rc" aria-labelledby="rc-title">
+      <header class="rc__head">
+        <div class="rc__intro">
+          <h2 id="rc-title" class="rc__title">Recommended Consumables</h2>
+          <p class="rc__desc">Everyday packing and shipping supplies to keep your stations running. Untick anything you don't need, set quantities, then add the rest to your cart in one click.</p>
+          <div class="rc__selectbar">
+            <span class="rc__count" id="rc-count">0 of 0 selected</span>
+            <button type="button" class="rc__toggle-all" id="rc-toggle-all">Clear all</button>
+          </div>
+        </div>
+      </header>
+
+      <div class="rc__summary" id="rc-summary">
+        <div class="rc__totals">
+          <p class="rc__total-label">Total price</p>
+          <p class="rc__total" id="rc-total">$0.00</p>
+          <p class="rc__units" id="rc-units">0 items</p>
+        </div>
+        <div class="rc__action">
+          <button type="button" class="rc__add" id="rc-add" aria-describedby="rc-hint">
+            <span class="rc__spinner" aria-hidden="true"></span>
+            <svg class="rc__add-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h2l2.4 10.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 1.9-1.4L21 8H6.2" /><circle cx="10" cy="20" r="1.4" /><circle cx="17" cy="20" r="1.4" /></svg>
+            <span class="rc__add-label" id="rc-add-label">Add All To Cart</span>
+          </button>
+          <p class="rc__hint" id="rc-hint"></p>
+        </div>
+      </div>
+
+      <div class="rc__carousel" role="region" aria-roledescription="carousel" aria-label="Product list">
+        <button type="button" class="rc__arrow rc__arrow--prev" id="rc-prev" aria-label="Previous products">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" /></svg>
+        </button>
+        <div class="rc__viewport" id="rc-viewport" tabindex="0" aria-label="Products. Use the left and right arrow keys to scroll.">
+          <ul class="rc__track" id="rc-track"></ul>
+        </div>
+        <button type="button" class="rc__arrow rc__arrow--next" id="rc-next" aria-label="Next products">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" /></svg>
+        </button>
+      </div>
+
+      <div class="rc__pager">
+        <div class="rc__dots" id="rc-dots" role="group" aria-label="Choose page"></div>
+        <p class="rc__range" id="rc-range" aria-hidden="true"></p>
+      </div>
+
+      <p class="visually-hidden" aria-live="polite" id="rc-live"></p>
+    </section>
+  </main>
+
+  <!-- Quick view -->
+  <dialog class="qv" id="rc-qv" aria-labelledby="qv-name">
+    <div class="qv__inner">
+      <button type="button" class="qv__close" id="qv-close" aria-label="Close quick view">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
+      </button>
+      <div class="qv__media"><img id="qv-img" alt="" width="400" height="400"></div>
+      <div class="qv__body">
+        <span class="badge" id="qv-badge" hidden>Bestseller</span>
+        <h3 class="qv__name" id="qv-name"></h3>
+        <p class="qv__model" id="qv-model"></p>
+        <p class="qv__price"><span id="qv-price"></span> <span class="qv__unit" id="qv-unit"></span></p>
+        <p class="ship" id="qv-ships"></p>
+        <div class="qv__row">
+          <div class="qty" data-role="qv-qty">
+            <button type="button" class="qty__btn" data-step="-1" tabindex="-1" aria-hidden="true">−</button>
+            <input class="qty__input" id="qv-qty" type="number" inputmode="numeric" min="1" max="99" step="1" value="1" aria-label="Quantity">
+            <button type="button" class="qty__btn" data-step="1" tabindex="-1" aria-hidden="true">+</button>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="qv-include">
+            <span class="switch__track" aria-hidden="true"><span class="switch__thumb"></span></span>
+            <span class="switch__label">Include in bundle</span>
+          </label>
+        </div>
+        <p class="qv__line" id="qv-line"></p>
+        <div class="qv__actions">
+          <button type="button" class="btn btn--primary" id="qv-done">Done</button>
+          <a class="qv__link" id="qv-link" target="_blank" rel="noopener">View full product details</a>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Toast -->
+  <div class="toast" id="rc-toast" role="status" aria-live="polite" hidden>
+    <span class="toast__thumbs" id="rc-toast-thumbs" aria-hidden="true"></span>
+    <span class="toast__text" id="rc-toast-text"></span>
+    <button type="button" class="toast__action" id="rc-toast-action">Undo</button>
+    <button type="button" class="toast__close" id="rc-toast-close" aria-label="Dismiss">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
+    </button>
+  </div>
+
+  <template id="rc-card">
+    <li class="card">
+      <input class="card__check" type="checkbox">
+      <label class="card__hit">
+        <span class="visually-hidden card__sr"></span>
+        <span class="card__box" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg></span>
+      </label>
+      <span class="badge card__badge" hidden>Bestseller</span>
+      <div class="card__media">
+        <img class="card__img" alt="" loading="lazy" decoding="async" width="400" height="400">
+        <button type="button" class="card__peek" tabindex="-1" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z" /><circle cx="12" cy="12" r="3" /></svg>
+          Quick view
+        </button>
+      </div>
+      <div class="card__body">
+        <button type="button" class="card__name"></button>
+        <p class="card__model"></p>
+        <p class="card__price"><span class="card__amount"></span> <span class="card__unit"></span></p>
+        <p class="ship card__ship"></p>
+      </div>
+      <div class="card__foot">
+        <div class="qty">
+          <button type="button" class="qty__btn" data-step="-1" tabindex="-1" aria-hidden="true">−</button>
+          <input class="qty__input" type="number" inputmode="numeric" min="1" max="99" step="1" value="1">
+          <button type="button" class="qty__btn" data-step="1" tabindex="-1" aria-hidden="true">+</button>
+        </div>
+        <span class="card__line" aria-hidden="true"></span>
+      </div>
+    </li>
+  </template>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
